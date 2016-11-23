@@ -1,0 +1,181 @@
+ {
+    /*Styles for the ul element*/
+    /**********/
+    /*Ul ends*/
+    /**********/
+    /*The new styles ends here*/
+}
+
+ .ada-hidden{
+     visibility: hidden;
+ }
+ .tab_container {
+    border: 1px solid #ECE6DD;
+    width: 100%;
+    background: #fff;
+    overflow: auto;
+}
+ .inner_container {
+    border: 1px solid #ECE6DD;
+    width: 100%;
+    background: #fff;
+    overflow: auto;
+}
+ .content_panel {
+    padding: 20px;
+    display: none;
+}
+ .content_panel.active {
+    display: block;
+}
+ .content_panel.inner_active {
+    display: block;
+}
+ .accordion_heading {
+    display: none;
+}
+ ul.spa-tab-controls {
+    margin: 0;
+    padding: 0;
+    float: left;
+    list-style: none;
+    height: 54px;
+    width: 100%;
+    border: 1px solid transparent;
+}
+ ul.spa-tab-controls .tab-spa-item {
+    float: left;
+    margin: 0 5px 0 0;
+    cursor: pointer;
+    padding: 10px 20px;
+    line-height: 31px;
+    background-color: #ECE6DD;
+    border: 1px solid #ece6dd;
+    border-bottom: none;
+    position: relative;
+    transition: all 0.3s ease 0s;
+}
+ ul.spa-tab-controls .tab-spa-item a {
+    color: #6B5E51;
+    text-decoration: none;
+    font-family: "cnx-regular", Helvetica, Arial, sans-serif;
+    font-size: 24px;
+}
+ ul.spa-tab-controls .tab-spa-item:hover {
+    background-color: #D1C9C0;
+    color: #333;
+    transition: all 0.3s ease 0s;
+}
+ ul.spa-tab-controls .tab-spa-item.active {
+    background-color: #fff;
+    color: #333;
+    transition: all .3s ease 0s;
+}
+ ul.inner-spa-tab-controls {
+    margin: 0;
+    padding: 0;
+    float: left;
+    list-style: none;
+    height: 54px;
+    width: 100%;
+    border: 1px solid transparent;
+}
+ ul.inner-spa-tab-controls .tab-spa-item {
+    float: left;
+    margin: 0 5px 0 0;
+    cursor: pointer;
+    padding: 10px 20px;
+    line-height: 31px;
+    background-color: #ECE6DD;
+    border: 1px solid #ece6dd;
+    border-bottom: none;
+    position: relative;
+    transition: all 0.3s ease 0s;
+}
+ ul.inner-spa-tab-controls .tab-spa-item a {
+    color: #6B5E51;
+    text-decoration: none;
+    font-family: "cnx-regular", Helvetica, Arial, sans-serif;
+    font-size: 24px;
+}
+ ul.inner-spa-tab-controls .tab-spa-item:hover {
+    background-color: #D1C9C0;
+    color: #333;
+    transition: all 0.3s ease 0s;
+}
+ ul.inner-spa-tab-controls .tab-spa-item.inner_active {
+    background-color: #fff;
+    color: #333;
+    transition: all .3s ease 0s;
+}
+@media screen and (max-width: 480px) {
+     .inner_container {
+        border: 1px solid #ECE6DD;
+        width: 100%;
+        background: #fff;
+        overflow: auto;
+    }
+     .accordion_heading {
+        color: #6B5E51;
+    }
+     .accordion-panel {
+        border: 0px #6495ED solid;
+        transition: all .6s .2s ease;
+    }
+     .content_panel {
+        display: block;
+        padding: 0 20px 0 20px;
+        background: #f1f1f1;
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.3s ease 0s;
+    }
+     .inner-spa-tab-controls {
+        display: none;
+    }
+     .spa-tab-controls {
+        display: none;
+    }
+     .accordion_heading {
+        background-color: #ECE6DD;
+        border-top: 1px solid #333;
+        margin: 0;
+        padding: 5px 20px;
+        display: block;
+        cursor: pointer;
+        user-select: none;
+        transition: all 0.3s ease 0s;
+    }
+     .accordion_heading a {
+        color: #6B5E51;
+        text-decoration: none;
+    }
+     .accordion_heading:hover {
+        background-color: #D1C9C0;
+    }
+     .accordion_heading:hover a {
+        color: #fff;
+    }
+     .d_active.accordion_heading {
+        background-color: #D1C9C0;
+        transition: all 0.3s ease 0s;
+    }
+     .d_active.accordion_heading a {
+        transition: all 0.3s ease 0s;
+        color: #fff;
+    }
+     .d_active.content_panel {
+        max-height: 500px;
+        padding: 0 20px 20px 20px;
+        background: #fff;
+        transition: all 0.3s ease;
+    }
+     .inner_active.content_panel {
+        max-height: 500px;
+        padding: 0 20px 20px 20px;
+        background: #fff;
+        transition: all 0.3s ease;
+    }
+
+
+}
