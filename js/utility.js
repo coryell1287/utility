@@ -26,7 +26,7 @@ class Utility {
         const innerItems = doc.querySelectorAll('.inner-spa-tab-controls li.tab-spa-item');
         const innerTabsDisplay = this.innerTabsDisplay.bind(this);
 
-        const innerContainer = doc.querySelectorAll('.inner_container .accordion_heading');
+        const innerContainer = doc.querySelectorAll('.inner_container .accordion_heading_inner');
         const toggleInnerAccordion = this.toggleInnerAccordion.bind(this);
 
         // Listen for the events taking place on inner tabs tabs
@@ -127,7 +127,7 @@ class Utility {
     toggleAccordion(heading, doc, e) {
 
         const panelId = heading.firstElementChild.hash;
-        const activeHeading = doc.querySelector('.d_active.accordion_heading');
+        const activeHeading = doc.querySelector('.d_active.accordion_heading ');
 
         activeHeading.classList.remove('d_active');
         activeHeading.blur();
@@ -148,26 +148,23 @@ class Utility {
 
 
     toggleInnerAccordion(heading, doc, e) {
-        console.log('Inner accordion');
+        const panelId2 = heading.firstElementChild.hash;
+        const activeHeading2 = doc.querySelector('.inner_active.accordion_heading_inner ');
 
-        const panelId = heading.firstElementChild.hash;
-        const activeHeading = doc.querySelector('.inner_active.accordion_heading');
-        console.log(activeHeading);
-
-        activeHeading.classList.remove('inner_active');
-        activeHeading.blur();
+        activeHeading2.classList.remove('inner_active');
+        activeHeading2.blur();
 
         e.currentTarget.classList.add('inner_active');
 
-        const activePanel = doc.querySelector('.content_panel.inner_active');
+        const activePanel2 = doc.querySelector('.content_panel.inner_active');
 
-        activePanel.classList.remove('inner_active');
-        activeHeading.blur();
+        activePanel2.classList.remove('inner_active');
+        activeHeading2.blur();
 
-        const newPanel = doc.querySelector(panelId);
+        const newPanel2 = doc.querySelector(panelId2);
 
-        newPanel.classList.add('inner_active');
-        newPanel.focus();
+        newPanel2.classList.add('inner_active');
+        newPanel2.focus();
     }
 
 
