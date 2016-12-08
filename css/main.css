@@ -1,39 +1,47 @@
-{
-/*Styles for the ul element*/
-/**********/
-/*Ul ends*/
-/**********/
-/*The new styles ends here*/
+/*This controls the animation for the arrows*/
+h3.d_active a > span:first-child {
+    transform: rotate(90deg);
+    transition: transform 0.3s ease 0s;
 }
 
-.ada-hidden{
+/*This controls the animation for the arrows*/
+h3.inner_active a > span:first-child {
+    transform: rotate(90deg);
+    transition: transform 0.3s ease 0s;
+}
+
+.spa-arrow-btn {
+    bottom: 3px;
+    left: -24px;
+    transition: transform 0.3s ease 0s;
+    transform: rotate(0deg);
+    display: inline-block;
+    position: absolute;
+}
+
+.ada-hidden {
     visibility: hidden;
 }
-.tab_container {
+
+.tab_container, .inner_container {
     border: 1px solid #ECE6DD;
     width: 100%;
     background: #fff;
     overflow: auto;
 }
-.inner_container {
-    border: 1px solid #ECE6DD;
-    width: 100%;
-    background: #fff;
-    overflow: auto;
-}
+
 .content_panel {
     padding: 20px;
     display: none;
 }
-.content_panel.active {
+.content_panel.active, .content_panel.inner_active {
     display: block;
 }
-.content_panel.inner_active {
-    display: block;
-}
+
 .accordion_heading, .accordion_heading_inner {
     display: none;
 }
+
 ul.spa-tab-controls {
     margin: 0;
     padding: 0;
@@ -108,6 +116,70 @@ ul.inner-spa-tab-controls .tab-spa-item.inner_active {
     color: #333;
     transition: all .3s ease 0s;
 }
+
+[data-mode="accordion"] .inner_container {
+    border: 1px solid #ECE6DD;
+    width: 100%;
+    background: #fff;
+    overflow: auto;
+}
+[data-mode="accordion"] .accordion_heading, [data-mode="accordion"] .accordion_heading_inner {
+    color: #6B5E51;
+}
+[data-mode="accordion"] .accordion-panel {
+    border: 0px #6495ED solid;
+    transition: all .6s .2s ease;
+}
+[data-mode="accordion"] .content_panel {
+    display: block;
+    padding: 0 20px 0 20px;
+    background: #fff;
+    height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease 0s;
+}
+[data-mode="accordion"] .inner-spa-tab-controls, [data-mode="accordion"] .spa-tab-controls {
+    display: none;
+}
+[data-mode="accordion"] .accordion_heading, [data-mode="accordion"] .accordion_heading_inner {
+    background-color: #ECE6DD;
+    border-top: 1px solid #333;
+    margin: 0;
+    padding: 5px 20px;
+    display: block;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.3s ease 0s;
+}
+[data-mode="accordion"] .accordion_heading a, [data-mode="accordion"] .accordion_heading_inner a {
+    color: #6B5E51;
+    text-decoration: none;
+    position: relative;
+    margin-left: 5px;
+}
+[data-mode="accordion"] .accordion_heading:hover, [data-mode="accordion"] .accordion_heading_inner:hover {
+    background-color: #D1C9C0;
+}
+[data-mode="accordion"] .accordion_heading:hover a, [data-mode="accordion"] .accordion_heading_inner:hover a {
+    color: #fff;
+}
+[data-mode="accordion"] .d_active.accordion_heading, [data-mode="accordion"] .d_active.accordion_heading_inner {
+    background-color: #D1C9C0;
+    transition: all 0.3s ease 0s;
+}
+[data-mode="accordion"] .d_active.accordion_heading a, [data-mode="accordion"] .d_active.accordion_heading_inner a {
+    transition: all 0.3s ease 0s;
+    color: #fff;
+}
+[data-mode="accordion"] .d_active.content_panel {
+    padding: 0 20px 20px 20px;
+    transition: all 0.6s ease;
+}
+[data-mode="accordion"] .inner_active.content_panel {
+    padding: 0 20px 20px 20px;
+    transition: all 0.6s ease;
+}
+
 @media screen and (max-width: 480px) {
     .inner_container {
         border: 1px solid #ECE6DD;
@@ -115,27 +187,29 @@ ul.inner-spa-tab-controls .tab-spa-item.inner_active {
         background: #fff;
         overflow: auto;
     }
+
     .accordion_heading, .accordion_heading_inner {
         color: #6B5E51;
     }
+
     .accordion-panel {
-        border: 0px #6495ED solid;
+        border: 0 #6495ED solid;
         transition: all .6s .2s ease;
     }
+
     .content_panel {
         display: block;
         padding: 0 20px 0 20px;
         background: #f1f1f1;
-        max-height: 0;
+        height: 0;
         overflow: hidden;
-        transition: all 0.3s ease 0s;
+        transition: all 0.6s ease 0s;
     }
-    .inner-spa-tab-controls {
+
+    .inner-spa-tab-controls, .spa-tab-controls {
         display: none;
     }
-    .spa-tab-controls {
-        display: none;
-    }
+
     .accordion_heading, .accordion_heading_inner {
         background-color: #ECE6DD;
         border-top: 1px solid #333;
@@ -146,16 +220,22 @@ ul.inner-spa-tab-controls .tab-spa-item.inner_active {
         user-select: none;
         transition: all 0.3s ease 0s;
     }
+
     .accordion_heading a, .accordion_heading_inner a {
         color: #6B5E51;
         text-decoration: none;
+        position: relative;
+        margin-left: 5px;
     }
+
     .accordion_heading:hover, .accordion_heading_inner:hover {
         background-color: #D1C9C0;
     }
+
     .accordion_heading:hover a, .accordion_heading_inner:hover a {
         color: #fff;
     }
+
     .d_active.accordion_heading, .d_active.accordion_heading_inner {
         background-color: #D1C9C0;
         transition: all 0.3s ease 0s;
@@ -165,17 +245,12 @@ ul.inner-spa-tab-controls .tab-spa-item.inner_active {
         color: #fff;
     }
     .d_active.content_panel {
-        max-height: 500px;
         padding: 0 20px 20px 20px;
-        background: #fff;
-        transition: all 0.3s ease;
+        transition: all 0.6s ease;
     }
+
     .inner_active.content_panel {
-        max-height: 500px;
         padding: 0 20px 20px 20px;
-        background: #fff;
-        transition: all 0.3s ease;
+        transition: all 0.6s ease;
     }
-
-
 }

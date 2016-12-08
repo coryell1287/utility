@@ -6,8 +6,9 @@ class Utility {
         // For performance, the document is being cached
         const doc = document;
 
-        const open = 'Opened';
-        const close = 'Closed';
+        // Pull the open and close text off of the spaParams object
+        const open = 'open';
+        const close = 'close';
 
         // Define the ada methods
         const applyAdaText = this.applyAdaText.bind(this);
@@ -21,7 +22,6 @@ class Utility {
         const headingElements = doc.querySelectorAll('.tab_container .accordion_heading');
         const toggleAccordion = this.toggleAccordion.bind(this);
 
-
         // Cache the Inner tabs items
         const innerItems = doc.querySelectorAll('.inner-spa-tab-controls li.tab-spa-item');
         const innerTabsDisplay = this.innerTabsDisplay.bind(this);
@@ -29,11 +29,21 @@ class Utility {
         const innerContainer = doc.querySelectorAll('.inner_container .accordion_heading_inner');
         const toggleInnerAccordion = this.toggleInnerAccordion.bind(this);
 
+        const closeAccordion = this.closeAccordion.bind(this);
+        const closeInnerAccord = this.closeInnerAccord.bind(this);
+
+        //Set the height for the accordion containers
+        const activeAccordionOuter = doc.querySelector('.content_panel.d_active');
+        const activeAccordionInner = doc.querySelector('.content_panel.inner_active');
+
+        activeAccordionOuter.style.height = `${activeAccordionOuter.scrollHeight}px`;
+        activeAccordionInner.style.height = `${activeAccordionInner.scrollHeight}px`;
+
         // Listen for the events taking place on inner tabs tabs
         Object.keys(innerItems).forEach((item) => {
             innerItems[item].addEventListener('click', (e) => {
                 e.preventDefault();
-                innerTabsDisplay(innerItems[item], doc, e);
+                innerTabsDisplay(innerItems[item], e);
             });
         });
 
@@ -41,7 +51,14 @@ class Utility {
         Object.keys(innerContainer).forEach((inner) => {
             innerContainer[inner].addEventListener('click', (e) => {
                 e.preventDefault();
-                toggleInnerAccordion(innerContainer[inner], doc, e);
+                toggleInnerAccordion(innerContainer[inner], e);
+            });
+        });
+
+        Object.keys(innerContainer).forEach((inner) => {
+            innerContainer[inner].addEventListener('dblclick', (e) => {
+                e.preventDefault();
+                closeInnerAccord(innerContainer[inner]);
             });
         });
 
@@ -50,7 +67,7 @@ class Utility {
         Object.keys(tabItems).forEach((tab) => {
             tabItems[tab].addEventListener('click', (e) => {
                 e.preventDefault();
-                tabDisplay(tabItems[tab], doc, e);
+                tabDisplay(tabItems[tab], e);
             });
         });
 
@@ -58,15 +75,24 @@ class Utility {
         Object.keys(headingElements).forEach((heading) => {
             headingElements[heading].addEventListener('click', (e) => {
                 e.preventDefault();
-                toggleAccordion(headingElements[heading], doc, e);
+                toggleAccordion(headingElements[heading], e);
             });
         });
+
+
+        // Listen for the events taking place on the accordion heading
+        Object.keys(headingElements).forEach((heading) => {
+            headingElements[heading].addEventListener('dblclick', (e) => {
+                e.preventDefault();
+                closeAccordion(headingElements[heading]);
+            });
+        });
+
 
         adaCheck(tabItems, open, close);
         adaCheck(headingElements, open, close);
         adaCheck(innerItems, open, close);
-
-
+        adaCheck(innerContainer, open, close);
     }
 
 
@@ -75,7 +101,7 @@ class Utility {
 
         cache.forEach((obj) => {
             el = obj.element;
-            obj.text === 'Results' ? el.insertAdjacentHTML('beforeend', `<span class="ada-hidden">${open}</span>`) : el.insertAdjacentHTML('beforeend', `<span class="ada-hidden">${close}</span>`)
+            obj.text === 'open' ? el.insertAdjacentHTML('beforeend', `<span class="ada-hidden">${open}</span>`) : el.insertAdjacentHTML('beforeend', `<span class="ada-hidden">${close}</span>`)
         });
 
     }
@@ -87,28 +113,78 @@ class Utility {
         Object.keys(headings).forEach((heading) => {
             cache.push({
                 element: headings[heading],
-                text: headings[heading].textContent
+                text: headings[heading].dataset.ada
             });
         });
 
         this.applyAdaText(cache, open, close);
     }
 
+    closeInnerAccord(heading) {
 
-    tabDisplay(tab, doc, e) {
+        const greatGran = heading.parentElement.parentElement.parentElement;
+
+        // See whether one accordion is to animate or all of them
+        const oneAtTime = greatGran.dataset.oneAtTime;
+
+        if (oneAtTime == 'false') {
+
+            const innerHash = heading.firstElementChild.hash;
+            const openInAccord = greatGran.querySelector('.inner_active.accordion_heading_inner');
+            const openInDrawer = greatGran.querySelector(innerHash);
+
+            openInAccord.classList.remove('inner_active');
+
+            openInDrawer.style.height  = 0;
+            openInDrawer.classList.remove('inner_active');
+
+        } else {
+            return false;
+        }
+    }
+
+    closeAccordion(heading) {
+
+        const greatGran = heading.parentElement.parentElement.parentElement;
+
+        // See whether one accordion is to animate or all of them
+        const oneAtTime = greatGran.dataset.oneAtTime;
+
+        if (oneAtTime == 'false') {
+
+            const hashId = heading.firstElementChild.hash;
+            const openAccord = greatGran.querySelector('.d_active.accordion_heading');
+            const openDrawer = greatGran.querySelector(hashId);
+
+
+            openAccord.classList.remove('d_active');
+
+            openDrawer.style.height  = 0;
+            openDrawer.classList.remove('d_active');
+
+        } else {
+            return false;
+        }
+    }
+
+    tabDisplay(tab, e) {
 
         const panelId = tab.firstElementChild.hash;
+        const paren = tab.parentElement;
+
         // Change the styling on the tabs
-        const activeTab = doc.querySelector('.tab-spa-item.active');
+        const activeTab = paren.querySelector('.tab-spa-item.active');
 
         activeTab.classList.remove('active');
         activeTab.blur();
 
-        e.currentTarget.classList.add('active');
-        e.currentTarget.focus();
+        const target = e.currentTarget;
+        target.classList.add('active');
+        target.focus();
 
         // Remove the class from the current active tab
-        const activePanel = doc.querySelector('.content_panel.active');
+        const granParen = tab.parentElement.parentElement;
+        const activePanel = granParen.querySelector('.content_panel.active');
 
         activePanel.classList.remove('active');
         activePanel.blur();
@@ -116,7 +192,7 @@ class Utility {
         // publish the Accordion Hide Event to Sparta Events
 
         // Apply the class to the new active class
-        const newPanel = doc.querySelector(panelId);
+        const newPanel = granParen.querySelector(panelId);
 
         newPanel.classList.add('active');
         newPanel.focus();
@@ -124,73 +200,153 @@ class Utility {
     }
 
 
-    toggleAccordion(heading, doc, e) {
+    toggleAccordion(heading, e) {
 
-        const panelId = heading.firstElementChild.hash;
-        const activeHeading = doc.querySelector('.d_active.accordion_heading ');
+        const greatGran = heading.parentElement.parentElement.parentElement;
 
-        activeHeading.classList.remove('d_active');
-        activeHeading.blur();
+        // See whether one accordion is to animate or all of them
+        const oneAtTime = greatGran.dataset.oneAtTime;
+        const activeHeading = greatGran.querySelector('.d_active.accordion_heading');
 
-        e.currentTarget.classList.add('d_active');
+        if (oneAtTime == 'true') {
 
-        const activePanel = doc.querySelector('.content_panel.d_active');
+            activeHeading.classList.remove('d_active');
+            activeHeading.blur();
 
-        activePanel.classList.remove('d_active');
-        activeHeading.blur();
+            const target = e.currentTarget;
+            target.classList.add('d_active');
 
-        const newPanel = doc.querySelector(panelId);
+            const activePanel = greatGran.querySelector('.content_panel.d_active');
 
-        newPanel.classList.add('d_active');
-        newPanel.focus();
+            // Before removing the class, set the height to zero
+            activePanel.style.height  = 0;
+            activePanel.classList.remove('d_active');
+            activeHeading.blur();
+
+            const newPanel = target.nextElementSibling;
+            const parentPanelHeight = newPanel.scrollHeight;
+
+            //Set height to content height
+            newPanel.style.height = `${newPanel.scrollHeight}px`;
+
+            newPanel.classList.add('d_active');
+            newPanel.focus();
+
+        } else if (oneAtTime == 'false') {
+
+            const target = e.currentTarget;
+            target.classList.add('d_active');
+
+            const newPanel = target.nextElementSibling;
+            const parentPanelHeight = newPanel.scrollHeight;
+
+            //Set height to content height
+            newPanel.style.height = `${newPanel.scrollHeight}px`;
+
+            newPanel.classList.add('d_active');
+            newPanel.focus();
+
+        }
+
 
     }
 
 
-    toggleInnerAccordion(heading, doc, e) {
-        const panelId2 = heading.firstElementChild.hash;
-        const activeHeading2 = doc.querySelector('.inner_active.accordion_heading_inner ');
+    toggleInnerAccordion(heading, e) {
 
-        activeHeading2.classList.remove('inner_active');
-        activeHeading2.blur();
 
-        e.currentTarget.classList.add('inner_active');
+        const greatGran = heading.parentElement.parentElement.parentElement;
+        const topLevel = heading.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement;
+        const oneAtTime = greatGran.dataset.oneAtTime;
 
-        const activePanel2 = doc.querySelector('.content_panel.inner_active');
+        const activeInnerHeading = greatGran.querySelector('.inner_active.accordion_heading_inner');
 
-        activePanel2.classList.remove('inner_active');
-        activeHeading2.blur();
+        if(oneAtTime === 'true'){
 
-        const newPanel2 = doc.querySelector(panelId2);
+            const activeParent = topLevel.querySelector('.content_panel.d_active');
+            activeInnerHeading.classList.remove('inner_active');
+            activeInnerHeading.blur();
 
-        newPanel2.classList.add('inner_active');
-        newPanel2.focus();
+            const activeDrawer = greatGran.querySelector('.content_panel.inner_active');
+
+            activeDrawer.style.height = 0;
+            const target = e.currentTarget;
+            target.classList.add('inner_active');
+
+            const parentHeight = activeParent.scrollHeight;
+            const activeHeight = activeDrawer.scrollHeight;
+
+            //Reset height to 0 before removing class
+            activeDrawer.classList.remove('inner_active');
+            activeInnerHeading.blur();
+
+            const newDrawer = activeInnerHeading.nextElementSibling;
+            //Seet height to content height
+            newDrawer.style.height = `${newDrawer.scrollHeight}px`;
+
+            // Get parent, subtract active, add new
+            activeParent.style.height = `${parentHeight - activeHeight + newDrawer.scrollHeight}px`;
+            newDrawer.classList.add('inner_active');
+            newDrawer.focus();
+
+        }  else {
+
+            const activeDrawer = greatGran.querySelector('.content_panel.inner_active');
+            const activeParent = topLevel.querySelector('.content_panel.d_active');
+
+            activeDrawer.style.height = 0;
+            const target = e.currentTarget;
+            target.classList.add('inner_active');
+
+            const parentHeight = activeParent.scrollHeight;
+            const activeHeight = activeDrawer.scrollHeight;
+
+            const newDrawer = activeInnerHeading.nextElementSibling;
+            //Set height to content height
+            newDrawer.style.height = `${newDrawer.scrollHeight}px`;
+
+            //Get parent, subtract active, add new
+            activeParent.style.height = `${parentHeight - activeHeight + newDrawer.scrollHeight}px`;
+            newDrawer.classList.add('inner_active');
+            newDrawer.focus();
+
+        }
+
     }
 
 
-    innerTabsDisplay(tab, doc, e) {
+    innerTabsDisplay(tab, e) {
 
-        const panelId = tab.firstElementChild.hash;
+        const panelInId = tab.firstElementChild.hash;
+        const paren = tab.parentElement;
 
         // Change the styling on the tabs
-        const activeTab = doc.querySelector('.tab-spa-item.inner_active');
+        const activeInTab = paren.querySelector('.tab-spa-item.inner_active');
 
-        activeTab.classList.remove('inner_active');
-        activeTab.blur();
+        activeInTab.classList.remove('inner_active');
+        activeInTab.blur();
 
-        e.currentTarget.classList.add('inner_active');
-        e.currentTarget.focus();
+        const target = e.currentTarget;
+
+        target.classList.add('inner_active');
+        target.focus();
         // publish the Accordion Hide Event to Sparta Events
 
-        const activePanel = doc.querySelector('.content_panel.inner_active');
-        activePanel.classList.remove('inner_active');
-        activePanel.blur();
+        const granParen = tab.parentElement.parentElement;
+        const activeInPanel = granParen.querySelector('.content_panel.inner_active');
 
-        const newPanel = doc.querySelector(panelId);
-        newPanel.classList.add('inner_active');
-        newPanel.focus();
+        activeInPanel.classList.remove('inner_active');
+        activeInPanel.blur();
+
+        const newInPanel = granParen.querySelector(panelInId);
+
+        newInPanel.classList.add('inner_active');
+        newInPanel.focus();
 
     }
+
+
+
 }
 
 
