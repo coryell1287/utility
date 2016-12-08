@@ -27,7 +27,6 @@
 }
 .content_panel.active {
     display: block;
-    height: 83vh;
 }
 .content_panel.inner_active {
     display: block;
